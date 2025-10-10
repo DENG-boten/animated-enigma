@@ -1,0 +1,20 @@
+nohup bash -c '
+src="/data95/slurm/zzx/pQTL/FINNGWAS"
+dst="/data/slurm/dengbw/FINNGWAS_raw"
+log="/home/dengbw/copy_finngwas.log"
+mkdir -p "$dst"
+total=$(ls "$src"/*.gz | wc -l)
+count=0
+echo "开始复制，共 $total 个文件..." >> "$log"
+for f in "$src"/*.gz; do
+  name=$(basename "$f")
+  if [ ! -f "$dst/$name" ]; then
+    cp "$f" "$dst/"
+    count=$((count + 1))
+    echo "✅ 已复制 $count / $total ：$name" >> "$log"
+  else
+    echo "⏩ 已存在，跳过：$name" >> "$log"
+  fi
+done
+echo "🎉 复制完成，总共复制了 $count 个新文件。" >> "$log"
+' &
