@@ -1,0 +1,33 @@
+# 在你有权限的路径下创建两个目录：一个存放原始数据，一个存放筛选结果
+mkdir -p /data/slurm/dengbw/GWAS_raw
+mkdir -p /data/slurm/dengbw/GWAS_filtered
+
+# 进入原始数据所在目录
+cd /data/slurm/zzx/pQTL/GWAS_summary/GWAS_data_original
+
+# 将所有 .gz 文件复制到你的 GWAS_raw 目录
+for f in *.gz; do
+  cp "$f" /data/slurm/dengbw/GWAS_raw/
+done
+# 进入你的数据目录
+cd /data/slurm/dengbw/GWAS_raw
+
+# 解压所有 .gz 文件（如果某些文件损坏会报错，可忽略）
+for f in *.gz; do
+  gunzip "$f"
+done
+
+# 查看目录下所有文件的大小和修改时间，确认是否解压成功
+ls -lh /data/slurm/dengbw/GWAS_raw/
+
+# 检查每个 .gz 文件的真实格式，确认是否为有效的 gzip 压缩文件
+file /data/slurm/dengbw/GWAS_raw/*.gz
+
+# 用 less 查看压缩文件内容，确认是否为文本格式
+less /data/slurm/dengbw/GWAS_raw/Multiple.Sclerosis.2007.txt.gz
+
+# 在目标目录创建一个测试文件，确认你是否有写权限
+touch /data/slurm/dengbw/test.txt
+
+# 如果你已经解压完毕并不再需要 .gz 文件，可以删除它们
+rm /data/slurm/dengbw/GWAS_raw/*.gz
