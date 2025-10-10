@@ -1,0 +1,18 @@
+nohup bash -c '
+cd /data/slurm/dengbw/FINNGWAS_raw
+log="/home/dengbw/unzip_finngwas.log"
+total=$(ls *.gz | wc -l)
+count=0
+echo "开始解压，共 $total 个文件..." >> "$log"
+for f in *.gz; do
+  if [ -f "$f" ]; then
+    echo "🔄 正在解压：$f" >> "$log"
+    gunzip -c "$f" > "${f%.gz}"
+    count=$((count + 1))
+    echo "✅ 已解压 $count / $total ：${f%.gz}" >> "$log"
+  fi
+done
+echo "🎉 所有文件解压完成，总共解压了 $count 个文件。" >> "$log"
+' &
+
+tail -f /home/dengbw/unzip_finngwas.log
