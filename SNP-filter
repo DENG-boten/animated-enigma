@@ -1,0 +1,63 @@
+library(data.table)
+
+input_dir <- "/data/slurm/dengbw/GWAS_raw"
+output_dir <- "/data/slurm/dengbw/GWAS_filtered"
+dir.create(output_dir, showWarnings = FALSE)
+
+files <- list.files(input_dir, pattern = "\\.sumstats$", full.names = TRUE)
+
+# 字段映射表
+field_map <- list(
+  CHR = c("CHR", "chr", "Chromosome"),
+  POS = c("POS", "pos", "BP", "position"),
+  MAF = c("MAF", "maf", "AF", "EAF"),
+  SE  = c("SE", "se", "StdErr"),
+  P   = c("P", "pval", "p_value")
+)
+
+for (file in files) {
+  cat("\n正在处理：", basename(file), "\n")
+  
+  gwas <- tryCatch(
+    fread(file, sep = "\t", header = TRUE),
+    error = function(e) {
+      cat("读取失败：", basename(file), "\n")
+      return(NULL)
+    }
+  )
+  
+  if (is.null(gwas)) next
+  
+  # 标准化字段名
+  for (std_name in names(field_map)) {
+    matched <- field_map[[std_name]] %in% names(gwas)
+    if (any(matched)) {
+      setnames(gwas, old = field_map[[std_name]][matched], new = std_name)
+    }
+  }
+  
+  # 检查是否有必要字段
+  required <- c("MAF", "SE", "P")
+  if (!all(required %in% names(gwas))) {
+    cat("跳过：缺少必要字段\n")
+    next
+  }
+  
+  cat("原始 SNP 数量：", nrow(gwas), "\n")
+  
+  # 筛选
+  gwas <- subset(gwas, MAF >= 0.0001)
+  gwas <- subset(gwas, SE < 0.2)
+  gwas <- subset(gwas, P < 1e-5)
+  
+  # 如果有 CHR 和 POS 字段，排除 MHC 区域
+  if (all(c("CHR", "POS") %in% names(gwas))) {
+    gwas <- subset(gwas, !(CHR == 6 & POS >= 25477797 & POS <= 36448354))
+  }
+  
+  cat("筛选后 SNP 数量：", nrow(gwas), "\n")
+  
+  # 保存
+  trait_name <- tools::file_path_sans_ext(basename(file))
+  fwrite(gwas, file.path(output_dir, paste0("filtered_", trait_name, ".tsv")), sep = "\t")
+}
