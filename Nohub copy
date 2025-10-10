@@ -18,3 +18,5 @@ for f in "$src"/*.gz; do
 done
 echo "🎉 复制完成，总共复制了 $count 个新文件。" >> "$log"
 ' &
+
+tail -f /home/dengbw/copy_finngwas.log
