@@ -1,0 +1,18 @@
+library(data.table)
+
+input_dir <- "/data/slurm/dengbw/GWAS_raw"
+files <- list.files(input_dir, pattern = "\\.sumstats$", full.names = TRUE)
+
+for (file in files) {
+  cat("\n字段检查：", basename(file), "\n")
+  header <- tryCatch(
+    names(fread(file, sep = "\t", header = TRUE, nrows = 0)),
+    error = function(e) {
+      cat("读取失败\n")
+      return(NULL)
+    }
+  )
+  if (!is.null(header)) {
+    print(header)
+  }
+}
