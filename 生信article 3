@@ -1,0 +1,80 @@
+# Figure 2: 数字孪生的工程优先级与未来愿景（概念流程图）
+# 依赖包：DiagrammeR
+# install.packages("DiagrammeR")
+
+library(DiagrammeR)
+
+grViz("
+digraph digital_twin_engineering {
+
+  graph [rankdir = LR, bgcolor = white, fontname = 'Helvetica']
+
+  node [shape = rectangle, style = filled, color = '#2B3A67',
+        fontname = 'Helvetica', fontcolor = white, fillcolor = '#2B3A67']
+
+  # Core modules
+  P [label = '数据管道\\n(高质量/可复现/隐私安全)']
+  M [label = '模型架构与计算平台\\n(可扩展/HPC/实时更新)']
+  S [label = '标准化接口与模块化算法\\n(协作/复用/可移植)']
+  C [label = '隐私保护与合规性\\n(跨机构协作/合规治理)']
+  G [label = '开放平台目标\\n(基础研究/临床/产业)']
+
+  # Cross-support edges
+  P -> S [color = '#9AA5B1', label = '数据规范与清洗']
+  S -> M [color = '#9AA5B1', label = '接口/算法适配']
+  P -> M [color = '#9AA5B1', label = '数据供给']
+  C -> S [color = '#9AA5B1', label = '隐私与接口策略']
+  C -> P [color = '#9AA5B1', label = '合规数据流']
+  M -> G [color = '#9AA5B1', label = '模拟与推演']
+  P -> G [color = '#9AA5B1', label = '可信数据支撑']
+  S -> G [color = '#9AA5B1', label = '协作与复用']
+  C -> G [color = '#9AA5B1', label = '安全落地']
+
+  # Clusters for visual grouping
+  subgraph cluster_pipeline {
+    label = 'Ⅰ 数据管道'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    P
+  }
+
+  subgraph cluster_arch_compute {
+    label = 'Ⅱ 模型架构与计算平台'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    M
+  }
+
+  subgraph cluster_std_algo {
+    label = 'Ⅲ 标准化接口与模块化算法'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    S
+  }
+
+  subgraph cluster_privacy {
+    label = 'Ⅳ 隐私保护与合规性'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    C
+  }
+
+  subgraph cluster_goal {
+    label = 'Ⅴ 未来愿景与开放平台'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    G
+  }
+
+}
+")
