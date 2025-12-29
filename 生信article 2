@@ -1,0 +1,70 @@
+library(DiagrammeR)
+
+grViz("
+digraph structured_AI_architecture {
+
+  graph [rankdir = LR, bgcolor = white, fontname = 'Helvetica']
+
+  node [shape = rectangle, style = filled, color = '#2B3A67',
+        fontname = 'Helvetica', fontcolor = white, fillcolor = '#2B3A67']
+
+  # Core modules
+  GNN [label = '图神经网络 (GNN)\\n网络结构建模']
+  TRF [label = 'Transformer\\n序列与上下文依赖']
+  KG [label = '知识图谱\\n因果解释与可解释性']
+  HYB [label = '混合型架构\\n联合预测与机制发现']
+
+  # Subnodes for biological context
+  node [shape = box, style = filled, color = '#4F6D7A', fillcolor = '#4F6D7A']
+  Net [label = '蛋白质互作网络\\n基因调控网络']
+  Seq [label = 'DNA序列\\n空间转录组学']
+  Expl [label = '药物-基因-通路关联\\n机制解释']
+
+  # Edges
+  Net -> GNN
+  Seq -> TRF
+  Expl -> KG
+
+  GNN -> HYB [color = '#9AA5B1', label = '结构依赖']
+  TRF -> HYB [color = '#9AA5B1', label = '序列建模']
+  KG -> HYB [color = '#9AA5B1', label = '因果解释']
+
+  # Clusters for grouping
+  subgraph cluster_gnn {
+    label = 'Ⅰ GNN'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    {rank = same; GNN; Net}
+  }
+
+  subgraph cluster_trf {
+    label = 'Ⅱ Transformer'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    {rank = same; TRF; Seq}
+  }
+
+  subgraph cluster_kg {
+    label = 'Ⅲ 知识图谱'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    {rank = same; KG; Expl}
+  }
+
+  subgraph cluster_hyb {
+    label = 'Ⅳ 混合型架构'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    HYB
+  }
+
+}
+")
