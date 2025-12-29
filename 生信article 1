@@ -1,0 +1,76 @@
+
+library(DiagrammeR)
+
+grViz("
+digraph bioinfo_ai_overview {
+
+  graph [rankdir = LR, bgcolor = white, fontname = 'Helvetica']
+
+  node [shape = rectangle, style = filled, color = '#2B3A67',
+        fontname = 'Helvetica', fontcolor = white, fillcolor = '#2B3A67']
+
+  # Main pillars
+  A [label = '数据整合挑战']
+  B [label = 'AI 架构转型']
+  C [label = '未来路线图（数字孪生）']
+
+  # Subnodes: Data integration
+  node [shape = box, style = filled, color = '#4F6D7A', fillcolor = '#4F6D7A']
+  A1 [label = '数据孤岛']
+  A2 [label = '潜在表征学习（VAE/多模态/张量分解）']
+  A3 [label = '技术落地：标准化/批次效应/HPC']
+
+  # Subnodes: AI architecture
+  B1 [label = '图神经网络（GNN）']
+  B2 [label = 'Transformer（序列/空间依赖）']
+  B3 [label = '知识图谱（因果解释）']
+
+  # Subnodes: Roadmap
+  C1 [label = '数字孪生（细胞/器官/个体）']
+  C2 [label = '空间转录组学（桥梁）']
+  C3 [label = '工程优先级：数据管道/接口/隐私']
+
+  # Edges from pillars to subnodes
+  A -> {A1 A2 A3}
+  B -> {B1 B2 B3}
+  C -> {C1 C2 C3}
+
+  # Cross-links showing logical flow
+  A2 -> B1 [color = '#9AA5B1']
+  A2 -> B2 [color = '#9AA5B1']
+  B3 -> C1 [color = '#9AA5B1', label = '解释性支撑']
+  C2 -> C1 [color = '#9AA5B1', label = '空间数据']
+  A3 -> C3 [color = '#9AA5B1', label = '工程落地']
+  B1 -> C1 [color = '#9AA5B1', label = '网络模拟']
+  B2 -> C1 [color = '#9AA5B1', label = '序列/上下文建模']
+
+  # Grouping clusters for visual structure
+  subgraph cluster_integr {
+    label = 'Ⅰ 数据整合'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    {rank = same; A; A1; A2; A3}
+  }
+
+  subgraph cluster_ai {
+    label = 'Ⅱ 架构转型'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    {rank = same; B; B1; B2; B3}
+  }
+
+  subgraph cluster_roadmap {
+    label = 'Ⅲ 未来路线图'
+    color = '#DDE3E9'
+    fontcolor = '#2B3A67'
+    style = filled
+    fillcolor = '#EEF2F7'
+    {rank = same; C; C1; C2; C3}
+  }
+
+}
+")
